@@ -35,6 +35,7 @@ class tkvideo():
         self.label = label
         self.loop = loop
         self.size = size
+        self.isPlaying = True
     
     def load(self, path, label, loop):
         """
@@ -44,17 +45,18 @@ class tkvideo():
         """
         frame_data = imageio.get_reader(path)
 
-        if loop == 1:
-            while True:
+        if self.isPlaying:
+            if loop == 1:
+                while True:
+                    for image in frame_data.iter_data():
+                        frame_image = ImageTk.PhotoImage(Image.fromarray(image).resize(self.size))
+                        label.config(image=frame_image)
+                        label.image = frame_image
+            else:
                 for image in frame_data.iter_data():
-                    frame_image = ImageTk.PhotoImage(Image.fromarray(image).resize(self.size))
-                    label.config(image=frame_image)
-                    label.image = frame_image
-        else:
-            for image in frame_data.iter_data():
-                    frame_image = ImageTk.PhotoImage(Image.fromarray(image).resize(self.size))
-                    label.config(image=frame_image)
-                    label.image = frame_image
+                        frame_image = ImageTk.PhotoImage(Image.fromarray(image).resize(self.size))
+                        label.config(image=frame_image)
+                        label.image = frame_image
 
     def play(self):
         """
